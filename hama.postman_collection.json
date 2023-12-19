@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "2eef4906-c95b-44c8-a214-0bbb6421f551",
+		"name": "hama",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "26703625"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:3000/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:3000/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "create order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZmlrcmlAZ21haWwuY29tIiwiaWF0IjoxNjk0Njg1NDk4LCJleHAiOjE2OTQ2ODkwOTh9.BdSaxACczYA3kVCNXJcs0A8Ezlp-nqRgm6oib2HbENU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"no_order\": \"Job Ayam\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/order/create"
+			},
+			"response": []
+		},
+		{
+			"name": "get all order",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "add personel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYWxmYXJpemlAZ21haWwuY29tIiwiaWF0IjoxNjk0NjkyMTcxLCJleHAiOjE2OTQ2OTU3NzF9.sHgKGLCNi6Tvy4vb4wDmZJCgxErnWSA6Niua2bnLEVU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"fikri\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/personel/add/Job%20Tikus"
+			},
+			"response": []
+		},
+		{
+			"name": "add peralatan",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYWxmYXJpemlAZ21haWwuY29tIiwiaWF0IjoxNjk0NjkyMTcxLCJleHAiOjE2OTQ2OTU3NzF9.sHgKGLCNi6Tvy4vb4wDmZJCgxErnWSA6Niua2bnLEVU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"fikri\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/personel/add/Job%20Tikus"
+			},
+			"response": []
+		},
+		{
+			"name": "add daily",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYWxmYXJpemlAZ21haWwuY29tIiwiaWF0IjoxNjk0NjkyMTcxLCJleHAiOjE2OTQ2OTU3NzF9.sHgKGLCNi6Tvy4vb4wDmZJCgxErnWSA6Niua2bnLEVU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"fikri\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/personel/add/Job%20Tikus"
+			},
+			"response": []
+		},
+		{
+			"name": "add indeks",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYWxmYXJpemlAZ21haWwuY29tIiwiaWF0IjoxNjk0NjkyMTcxLCJleHAiOjE2OTQ2OTU3NzF9.sHgKGLCNi6Tvy4vb4wDmZJCgxErnWSA6Niua2bnLEVU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"fikri\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/personel/add/Job%20Tikus"
+			},
+			"response": []
+		},
+		{
+			"name": "add inpeksi",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYWxmYXJpemlAZ21haWwuY29tIiwiaWF0IjoxNjk0NzY1OTQyLCJleHAiOjE2OTQ3Njk1NDJ9.Ub2QofncnYCcv4rSfxFYRX_rcV-LYj6n-lKlQHUGfgY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "tikus",
+							"type": "text"
+						},
+						{
+							"key": "lokasi",
+							"value": "sukabumi",
+							"type": "text"
+						},
+						{
+							"key": "rekomendasi",
+							"value": "umpan",
+							"type": "text"
+						},
+						{
+							"key": "tanggal",
+							"value": "2023-09-09",
+							"type": "text"
+						},
+						{
+							"key": "keterangan",
+							"value": "bersih",
+							"type": "text"
+						},
+						{
+							"key": "bukti_foto",
+							"type": "file",
+							"src": "/C:/Users/FIKRI/Downloads/fix6.png"
+						}
+					]
+				},
+				"url": "http://localhost:3000/api/inspeksi/add/Job%20Tikus"
+			},
+			"response": []
+		},
+		{
+			"name": "add pemakaian",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYWxmYXJpemlAZ21haWwuY29tIiwiaWF0IjoxNjk0NjkyMTcxLCJleHAiOjE2OTQ2OTU3NzF9.sHgKGLCNi6Tvy4vb4wDmZJCgxErnWSA6Niua2bnLEVU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"fikri\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:3000/api/personel/add/Job%20Tikus"
+			},
+			"response": []
+		},
+		{
+			"name": "get personel",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get absen",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get peralatan",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get daily",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get indeks",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get inpeksi",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get pemakaian",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "absen",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

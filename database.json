@@ -1,0 +1,12 @@
+{
+  "dev": {
+    "driver": "mysql",
+    "host": "127.0.0.1",
+    "user": "root",
+    "password": "12345678",
+    "database": "database_test",
+    "multipleStatements": true,
+    "connectionTimeout": 30000,
+    "idleTimeoutMillis": 30000
+  }
+}
