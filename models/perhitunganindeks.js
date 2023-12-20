@@ -14,12 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   PerhitunganIndeks.init({
-    name: DataTypes.STRING,
     no_order: DataTypes.STRING,
     lokasi: DataTypes.STRING,
     jenis_hama: DataTypes.STRING,
     indeks_populasi: DataTypes.INTEGER,
-    jumlah: DataTypes.INTEGER,
     tanggal: DataTypes.STRING,
     status: DataTypes.STRING
   }, {

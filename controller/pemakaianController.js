@@ -8,6 +8,7 @@ exports.getAllPemakaianByMonth = async (req, res) => {
     const {no_order, bulan, tahun} = req.params;
 
     const startDate = new Date(`${tahun}-${bulan}-01`);
+    startDate.setHours(0, 0, 0, 0);
     const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
 
     // Cari nomor order yang sesuai
@@ -31,7 +32,6 @@ exports.getAllPemakaianByMonth = async (req, res) => {
     if (!pemakaianList || pemakaianList.length === 0) {
       return res.status(404).json({ message: 'Tidak ada data pemakaian untuk kriteria ini' });
     }
-
     res.status(201).json({ success: true, data: pemakaianList });
   } catch (error) {
     console.error('Gagal mendapatkan data pemakaian:', error);
@@ -96,7 +96,7 @@ exports.addPemakaian = async (req, res) => {
       const PemakaianList = await MonitoringPemakaian.findAll({ where: { no_order,tanggal } });
   
       if (!PemakaianList || PemakaianList.length === 0) {
-        return res.status(404).json({ error: 'Tidak ada data Pemakaian untuk nomor order ini' });
+        return res.status(404).json({ message: 'Tidak ada data Pemakaian untuk nomor order ini' });
       }
   
       res.status(201).json({success: true, data: PemakaianList});

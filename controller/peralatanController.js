@@ -8,6 +8,8 @@ exports.getAllPeralatanByMonth = async (req, res) => {
     const {no_order, bulan, tahun} = req.params;
 
     const startDate = new Date(`${tahun}-${bulan}-01`);
+    startDate.setHours(0, 0, 0, 0);
+
     const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
 
 

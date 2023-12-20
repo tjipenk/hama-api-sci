@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   InspeksiAksesHama.init({
-    name: DataTypes.STRING,
+  
     no_order: DataTypes.STRING,
     lokasi: DataTypes.STRING,
     bukti_foto: DataTypes.STRING,

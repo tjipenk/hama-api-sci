@@ -35,13 +35,17 @@ router.get('/peralatan/getall/:no_order/:tahun/:bulan',authenticateToken, perala
 router.post('/daily/add/:no_order',authenticateToken, dailyController.addDaily);
 router.get('/daily/getall/:no_order',authenticateToken, dailyController.getAllDaily);
 router.get('/daily/getall/:no_order/:tanggal',authenticateToken, dailyController.getAllDailyDate);
+router.get('/daily/getall/:no_order/:tahun/:bulan',authenticateToken, dailyController.getAllDailyByMonth);
 // indeks
 router.post('/indeks/add/:no_order',authenticateToken, indeksController.addIndeks);
 router.get('/indeks/getall/:no_order',authenticateToken, indeksController.getAllIndeks);
 router.get('/indeks/getall/:no_order/:tanggal',authenticateToken, indeksController.getAllIndeksDate);
+router.get('/indeks/getall/:no_order/:tahun/:bulan',authenticateToken, indeksController.getAllIndexByMonth);
 // inspeksi
 router.post('/inspeksi/add/:no_order',authenticateToken, inpeksiController.addInspeksi);
 router.get('/inspeksi/getall/:no_order',authenticateToken, inpeksiController.getAllInspeksi);
+router.get('/inspeksi/getall/:no_order/:tanggal',authenticateToken, inpeksiController.getAllInspeksiDate);
+router.get('/inspeksi/getall/:no_order/:tahun/:bulan',authenticateToken, inpeksiController.getAllInspeksiByMonth);
 // pemakaian
 router.post('/pemakaian/add/:no_order',authenticateToken, pemakaianController.addPemakaian);
 router.get('/pemakaian/getall/:no_order',authenticateToken, pemakaianController.getAllPemakaian);

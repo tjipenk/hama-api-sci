@@ -1,4 +1,6 @@
 const { Order, InspeksiAksesHama } = require("../models");
+const { Op } = require('sequelize');
+
 
 const multer = require('multer');
 const path = require('path');
@@ -18,20 +20,56 @@ const upload = multer({ storage });
 
 uploadFile = upload.single('bukti_foto'); 
 
+
+exports.getAllInspeksiByMonth = async (req, res) => {
+  try {
+   
+    const {no_order, bulan, tahun} = req.params;
+
+    const startDate = new Date(`${tahun}-${bulan}-01`);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
+
+    // Cari nomor order yang sesuai
+    const existingOrder = await Order.findOne({ where: { no_order } });
+
+    if (!existingOrder) {
+      return res.status(404).json({ message: 'Nomor order tidak ditemukan' });
+    }
+
+    const inspeksiList = await InspeksiAksesHama.findAll({
+      where: {
+        no_order,
+        tanggal: {
+          [Op.between]: [startDate, endDate],
+        },
+      },
+      order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
+    });
+
+
+    if (!inspeksiList || inspeksiList.length === 0) {
+      return res.status(404).json({ message: 'Tidak ada data inspeksi untuk kriteria ini' });
+    }
+    res.status(201).json({ success: true, data: inspeksiList });
+  } catch (error) {
+    console.error('Gagal mendapatkan data inspeksi:', error);
+    res.status(500).json({ message: 'Gagal mendapatkan data inspeksi' });
+  }
+};
+
 exports.addInspeksi = async (req, res) => {
   try {
     uploadFile(req, res, async (err) => {
       if (err) {
         console.error("Gagal mengunggah file:", err);
-        return res.status(500).json({ error: "Gagal mengunggah file" });
+        return res.status(500).json({ message: "Gagal mengunggah file" });
       }
       const { no_order } = req.params;
       const {
-        name,
         lokasi,
         rekomendasi,
-        tanggal,
-      
+        tanggal,    
         keterangan,
       } = req.body;
 
@@ -41,26 +79,24 @@ exports.addInspeksi = async (req, res) => {
       const existingOrder = await Order.findOne({ where: { no_order } });
 
       if (!existingOrder) {
-        return res.status(404).json({ error: "Nomor order tidak ditemukan" });
+        return res.status(404).json({ message: "Nomor order tidak ditemukan" });
       }
       const existingDaily = await InspeksiAksesHama.findOne({
-        where: {
-       
-          no_order,
-          name,
+        where: {       
+          no_order,        
           tanggal
       
         },
       });
 
       if (existingDaily) {
-        return res.status(409).json({ error: 'Data Inspeksi dengan nama dan order yang sama sudah ada' });
+        return res.status(409).json({ message: 'Data Inspeksi dengan nama dan order yang sama sudah ada' });
       
       }
 
       // Tambahkan data Daily ke dalam tabel
-      const newDaily = await InspeksiAksesHama.create({
-        name,
+      const newInspeksi = await InspeksiAksesHama.create({
+      
         lokasi,
         rekomendasi,
         tanggal,
@@ -69,11 +105,11 @@ exports.addInspeksi = async (req, res) => {
         no_order,
       });
 
-      res.status(201).json(newDaily);
+      res.status(201).json(newInspeksi);
     });
   } catch (error) {
     console.error("Gagal menambahkan Inspeksi:", error);
-    res.status(500).json({ error: "Gagal menambahkan Inspeksi" });
+    res.status(500).json({ message: "Gagal menambahkan Inspeksi" });
   }
  
 };
@@ -83,19 +119,40 @@ exports.getAllInspeksi = async (req, res) => {
     const { no_order } = req.params;
 
     // Cari semua data Inspeksi berdasarkan nomor order
-    const InspeksiList = await InspeksiAksesHama.findAll({
+    const inspeksiList = await InspeksiAksesHama.findAll({
       where: { no_order },
     });
 
-    if (!InspeksiList || InspeksiList.length === 0) {
+    if (!inspeksiList || inspeksiList.length === 0) {
       return res
         .status(404)
-        .json({ error: "Tidak ada data Inspeksi untuk nomor order ini" });
+        .json({ message: "Tidak ada data Inspeksi untuk nomor order ini" });
     }
 
-    res.status(200).json(InspeksiList);
+    res.status(201).json({ success: true, data: inspeksiList });
   } catch (error) {
     console.error("Gagal mendapatkan data Inspeksi:", error);
-    res.status(500).json({ error: "Gagal mendapatkan data Inspeksi" });
+    res.status(500).json({ message: "Gagal mendapatkan data Inspeksi" });
   }
 };
+
+
+  
+exports.getAllInspeksiDate = async (req, res) => {
+  try {
+    const { no_order,tanggal } = req.params;
+
+    // Cari semua data inspeksi berdasarkan nomor order
+    const inspeksiList = await InspeksiAksesHama.findAll({ where: { no_order,tanggal } });
+
+    if (!inspeksiList || inspeksiList.length === 0) {
+      return res.status(404).json({ message: 'Tidak ada data Inspeksi untuk nomor order ini' });
+    }
+
+    res.status(201).json({success: true, data: inspeksiList});
+  } catch (error) {
+    console.error('Gagal mendapatkan data Inspeksi:', error);
+    res.status(500).json({ message: 'Gagal mendapatkan data Inspeksi' });
+  }
+};
+
