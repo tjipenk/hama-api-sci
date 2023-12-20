@@ -19,12 +19,17 @@ router.post('/order/create',authenticateToken, orderController.createOrder);
 router.get('/order/getall',authenticateToken, orderController.getAllOrders);
 // personel
 router.post('/personel/add/:no_order',authenticateToken, personelController.addPersonelByNoOrder);
-router.post('/personel/absen/:no_order',authenticateToken, personelController.absenPersonel);
-router.get('/personel/absen/getall/:no_order/:tanggal',authenticateToken, personelController.getAbsenByNoOrder);
-router.get('/personel/absen/name/:no_order/:id',authenticateToken, personelController.getAbsenByIdPerson);
 router.put('/personel/update/:no_order/:id',authenticateToken, personelController.updatePersonelById);
 router.delete('/personel/delete/:no_order/:id',authenticateToken, personelController.deletePersonelById);
 router.get('/personel/getall/:no_order',authenticateToken, personelController.getPersonelByNoOrder);
+//absen
+router.post('/personel/absen/:no_order',authenticateToken, personelController.absenPersonel);
+router.put('/personel/absen/update/:no_order/:id',authenticateToken, personelController.updateAbsenById);
+router.get('/personel/absen/getall/:no_order/:tanggal',authenticateToken, personelController.getAbsenByDate);
+router.get('/personel/absen/getall/:no_order/:tahun/:bulan',authenticateToken, personelController.getAbsenByMonth);
+router.get('/personel/absen/name/:no_order/:id',authenticateToken, personelController.getAbsenByIdPerson);
+router.get('/personel/absen/name/:no_order/:id/:tanggal',authenticateToken, personelController.getAbsenPersonByDate);
+router.get('/personel/absen/name/:no_order/:id/:tahun/:bulan',authenticateToken, personelController.getAbsenPersonByMonth);
 
 // peralatan
 router.post('/peralatan/add/:no_order',authenticateToken, peralatanController.addPeralatan);

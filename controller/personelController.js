@@ -1,4 +1,6 @@
 const { Personel, Order,Absensi } = require('../models');
+const { Op } = require('sequelize');
+
 
 exports.addPersonelByNoOrder = async (req, res) => {
   try {
@@ -9,7 +11,7 @@ exports.addPersonelByNoOrder = async (req, res) => {
     const order = await Order.findOne({ where: { no_order } });
 
     if (!order) {
-      return res.status(404).json({ error: 'Order tidak ditemukan' });
+      return res.status(404).json({ message: 'Order tidak ditemukan' });
     }
 
     // Buat data personel dan hubungkan dengan order
@@ -19,7 +21,7 @@ exports.addPersonelByNoOrder = async (req, res) => {
     res.status(201).json(newPersonel);
   } catch (error) {
     console.error('Gagal menambahkan personel:', error);
-    res.status(500).json({ error: 'Gagal menambahkan personel' });
+    res.status(500).json({ message: 'Gagal menambahkan personel' });
   }
 };
 
@@ -32,7 +34,7 @@ exports.getPersonelByNoOrder = async (req, res) => {
     const order = await Order.findOne({ where: { no_order } });
 
     if (!order) {
-      return res.status(404).json({ error: 'Order tidak ditemukan' });
+      return res.status(404).json({ message: 'Order tidak ditemukan' });
     }
 
   
@@ -41,11 +43,108 @@ exports.getPersonelByNoOrder = async (req, res) => {
     res.status(200).json({success: true,data: personelList});
   } catch (error) {
     console.error('Gagal mendapatkan daftar personel:', error);
-    res.status(500).json({ error: 'Gagal mendapatkan daftar personel' });
+    res.status(500).json({ message: 'Gagal mendapatkan daftar personel' });
   }
 };
 
-exports.getAbsenByNoOrder = async (req, res) => {
+exports.getAbsenPersonByDate = async (req, res) => {
+  try {
+    const { no_order,id, tanggal } = req.params; 
+
+    const order = await Absensi.findOne({ where: { no_order:no_order} });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Data Absen tidak ditemukan' });
+    }
+
+  
+    const personelList = await Absensi.findAll({ where: { no_order: no_order,  id_personel : id, tanggal: tanggal} });
+
+    res.status(200).json({success:true,data:personelList});
+  } catch (error) {
+    console.error('Gagal mendapatkan daftar personel:', error);
+    res.status(500).json({ message: 'Gagal mendapatkan daftar personel' });
+  }
+
+};
+ exports.getAbsenPersonByMonth = async (req, res) => {
+
+  try {
+   
+    const {no_order, bulan, tahun, id} = req.params;
+
+    const startDate = new Date(`${tahun}-${bulan}-01`);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
+
+    // Cari nomor order yang sesuai
+    const absenPersonel = await Order.findOne({ where: { no_order } });
+
+    if (!absenPersonel) {
+      return res.status(404).json({ message: 'Nomor order tidak ditemukan' });
+    }
+
+    const absenList = await Absensi.findAll({
+      where: {
+        no_order,
+        id_personel : id,
+        tanggal: {
+          [Op.between]: [startDate, endDate],
+        },
+      },
+      order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
+    });
+
+
+    if (!absenList || absenList.length === 0) {
+      return res.status(404).json({ message: 'Tidak ada data absen' });
+    }
+    res.status(201).json({ success: true, data: absenList });
+  } catch (error) {
+    console.error('Gagal mendapatkan data absensi:', error);
+    res.status(500).json({ message: 'Gagal mendapatkan data absensi' });
+  }
+ };
+
+exports.getAbsenByMonth = async (req, res) => {
+
+  try {
+   
+    const {no_order, bulan, tahun} = req.params;
+
+    const startDate = new Date(`${tahun}-${bulan}-01`);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
+
+    // Cari nomor order yang sesuai
+    const absenPersonel = await Order.findOne({ where: { no_order } });
+
+    if (!absenPersonel) {
+      return res.status(404).json({ message: 'Nomor order tidak ditemukan' });
+    }
+
+    const absenList = await Absensi.findAll({
+      where: {
+        no_order,
+        tanggal: {
+          [Op.between]: [startDate, endDate],
+        },
+      },
+      order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
+    });
+
+
+    if (!absenList || absenList.length === 0) {
+      return res.status(404).json({ message: 'Tidak ada data absen' });
+    }
+    res.status(201).json({ success: true, data: absenList });
+  } catch (error) {
+    console.error('Gagal mendapatkan data absensi:', error);
+    res.status(500).json({ message: 'Gagal mendapatkan data absensi' });
+  }
+};
+
+exports.getAbsenByDate = async (req, res) => {
   try {
     const { no_order,tanggal } = req.params; 
 
@@ -53,7 +152,7 @@ exports.getAbsenByNoOrder = async (req, res) => {
     const order = await Absensi.findOne({ where: { no_order } });
 
     if (!order) {
-      return res.status(404).json({ error: 'Order tidak ditemukan' });
+      return res.status(404).json({ message: 'Order tidak ditemukan' });
     }
 
   
@@ -62,7 +161,7 @@ exports.getAbsenByNoOrder = async (req, res) => {
     res.status(200).json({success : true,data:personelList});
   } catch (error) {
     console.error('Gagal mendapatkan daftar personel:', error);
-    res.status(500).json({ error: 'Gagal mendapatkan daftar personel' });
+    res.status(500).json({ message: 'Gagal mendapatkan daftar personel' });
   }
 };
 
@@ -74,16 +173,15 @@ exports.getAbsenByIdPerson = async (req, res) => {
     const order = await Absensi.findOne({ where: { no_order:no_order} });
 
     if (!order) {
-      return res.status(404).json({ error: 'Data Absen tidak ditemukan' });
+      return res.status(404).json({ message: 'Data Absen tidak ditemukan' });
     }
 
   
-    const personelList = await Absensi.findAll({ where: { no_order: no_order,  id_personel : id } });
-
+    const personelList = await Absensi.findAll({ where: { no_order: no_order,  id_personel : id },order: [['tanggal', 'ASC']], });
     res.status(200).json({success:true,data:personelList});
   } catch (error) {
     console.error('Gagal mendapatkan daftar personel:', error);
-    res.status(500).json({ error: 'Gagal mendapatkan daftar personel' });
+    res.status(500).json({ message: 'Gagal mendapatkan daftar personel' });
   }
 };
 
@@ -115,6 +213,33 @@ exports.absenPersonel = async (req, res) => {
   }
 };
 
+exports.updateAbsenById = async (req, res)=> {
+  try {
+    const { id, no_order} = req.params; 
+    const {keterangan} = req.body;
+    const order = await Order.findOne({ where: { no_order } });
+
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order tidak ditemukan' });
+    }
+ 
+   
+    const absensi = await Absensi.findOne({ where: { id: id } });
+    if (!absensi) {
+      return res.status(404).json({ message: 'Personel tidak ditemukan' });
+    }
+
+    // Lakukan update data personel
+    await absensi.update({keterangan});
+
+    res.status(201).json({ message: 'Data absen berhasil diupdate' });
+  } catch (error) {
+    console.error('Gagal mengupdate absen personel:', error);
+    res.status(500).json({ message: 'Gagal mengupdate  personel' });
+  }
+};
+
 
 exports.updatePersonelById = async (req, res) => {
   try {
@@ -125,18 +250,16 @@ exports.updatePersonelById = async (req, res) => {
     const personel = await Personel.findOne({ where: { id: id } });
 
     if (!personel) {
-      return res.status(404).json({ error: 'Personel tidak ditemukan' });
+      return res.status(404).json({ message: 'Personel tidak ditemukan' });
     }
 
-    console.log(personel);
-    console.log(name);
     // Lakukan update data personel
     await personel.update({name});
 
     res.status(200).json({ message: 'Data personel berhasil diupdate' });
   } catch (error) {
     console.error('Gagal mengupdate personel:', error);
-    res.status(500).json({ error: 'Gagal mengupdate personel' });
+    res.status(500).json({ message: 'Gagal mengupdate personel' });
   }
 };
 exports.deletePersonelById = async (req, res) => {
@@ -147,7 +270,7 @@ exports.deletePersonelById = async (req, res) => {
     const personel = await Personel.findOne({ where: { id: id } });
 
     if (!personel) {
-      return res.status(404).json({ error: 'Personel tidak ditemukan' });
+      return res.status(404).json({ message: 'Personel tidak ditemukan' });
     }
 
     // Hapus data personel
@@ -156,6 +279,6 @@ exports.deletePersonelById = async (req, res) => {
     res.status(200).json({ message: 'Data personel berhasil dihapus' });
   } catch (error) {
     console.error('Gagal menghapus personel:', error);
-    res.status(500).json({ error: 'Gagal menghapus personel' });
+    res.status(500).json({ message: 'Gagal menghapus personel' });
   }
 };
