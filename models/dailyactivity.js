@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   DailyActivity.init({
-    name: DataTypes.STRING,
     no_order: DataTypes.STRING,
     lokasi: DataTypes.STRING,
     jenis_treatment: DataTypes.STRING,

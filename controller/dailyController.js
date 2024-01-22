@@ -98,13 +98,13 @@ exports.addDaily = async (req, res) => {
         where: {
        
           no_order,
-          tanggal
-      
+          tanggal, 
+          jenis_treatment
         },
       });
 
       if (existingDaily) {
-        return res.status(409).json({ message: 'Data Daily dengan nama dan order yang sama sudah ada' });
+        return res.status(409).json({ message: 'Data Daily dengan Jenis treatment dan order yang sama sudah ada' });
       
       }
 
@@ -119,8 +119,8 @@ exports.addDaily = async (req, res) => {
         keterangan,
         no_order,
       });
-
-      res.status(201).json(newDaily);
+console.log(newDaily);
+      res.status(201).json({ message: 'Berhasil menambahkan data Daily' });
     });
   } catch (error) {
     console.error('Gagal menambahkan Daily:', error);

@@ -36,26 +36,39 @@ router.post('/peralatan/add/:no_order',authenticateToken, peralatanController.ad
 router.get('/peralatan/getall/:no_order',authenticateToken, peralatanController.getAllPeralatan);
 router.get('/peralatan/getall/:no_order/:tanggal',authenticateToken, peralatanController.getPeralatanDate);
 router.get('/peralatan/getall/:no_order/:tahun/:bulan',authenticateToken, peralatanController.getAllPeralatanByMonth);
+router.get('/peralatan/download/:no_order/:tahun/:bulan',authenticateToken, peralatanController.getDownloadByMonth);
+
 // daily
 router.post('/daily/add/:no_order',authenticateToken, dailyController.addDaily);
 router.get('/daily/getall/:no_order',authenticateToken, dailyController.getAllDaily);
 router.get('/daily/getall/:no_order/:tanggal',authenticateToken, dailyController.getAllDailyDate);
 router.get('/daily/getall/:no_order/:tahun/:bulan',authenticateToken, dailyController.getAllDailyByMonth);
+// router.get('/daily/download/:no_order/:tahun/:bulan',authenticateToken, dailyController.getDownloadByMonth);
+
+
 // indeks
 router.post('/indeks/add/:no_order',authenticateToken, indeksController.addIndeks);
 router.get('/indeks/getall/:no_order',authenticateToken, indeksController.getAllIndeks);
 router.get('/indeks/getall/:no_order/:tanggal',authenticateToken, indeksController.getAllIndeksDate);
 router.get('/indeks/getall/:no_order/:tahun/:bulan',authenticateToken, indeksController.getAllIndexByMonth);
+router.get('/indeks/download/:no_order/:tahun/:bulan',authenticateToken, indeksController.getDownloadByMonth);
+
+
 // inspeksi
 router.post('/inspeksi/add/:no_order',authenticateToken, inpeksiController.addInspeksi);
 router.get('/inspeksi/getall/:no_order',authenticateToken, inpeksiController.getAllInspeksi);
 router.get('/inspeksi/getall/:no_order/:tanggal',authenticateToken, inpeksiController.getAllInspeksiDate);
 router.get('/inspeksi/getall/:no_order/:tahun/:bulan',authenticateToken, inpeksiController.getAllInspeksiByMonth);
+router.get('/inspeksi/download/:no_order/:tahun/:bulan',authenticateToken, inpeksiController.getDownloadByMonth);
+
+
 // pemakaian
 router.post('/pemakaian/add/:no_order',authenticateToken, pemakaianController.addPemakaian);
 router.get('/pemakaian/getall/:no_order',authenticateToken, pemakaianController.getAllPemakaian);
 router.get('/pemakaian/getall/:no_order/:tanggal',authenticateToken, pemakaianController.getAllPemakaianDate);
 router.get('/pemakaian/getall/:no_order/:tahun/:bulan',authenticateToken, pemakaianController.getAllPemakaianByMonth);
+router.get('/pemakaian/download/:no_order/:tahun/:bulan',authenticateToken, pemakaianController.getDownloadByMonth);
+
 // auth
 router.post('/login', userController.loginUser);
 
