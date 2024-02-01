@@ -41,7 +41,7 @@ exports.getDownloadByMonth = async (req, res) => {
 
  
   const doc = new PDFDocument({ margin: 30, size: 'A4' , layout : 'portrait'});
-  const outputPath = `uploads/perhitungan-index-${tahun}${bulan}.pdf`;
+  const outputPath = `uploads/perhitungan-index-${no_order}-${tahun}${bulan}.pdf`;
   doc.pipe(fs.createWriteStream(outputPath));
 
   // Tambahkan header ke PDF

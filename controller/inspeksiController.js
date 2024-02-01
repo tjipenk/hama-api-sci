@@ -4,7 +4,10 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { format } = require('date-fns');
-const PDFDocument = require("pdfkit-table");
+const pdf = require('html-pdf');
+const handlebars = require('handlebars');
+
+
 
 
 const storage = multer.diskStorage({
@@ -23,7 +26,6 @@ const upload = multer({ storage });
 uploadFile = upload.single('bukti_foto'); 
 
 
-
 exports.getDownloadByMonth = async (req, res) => {
 
   try {
@@ -39,6 +41,7 @@ exports.getDownloadByMonth = async (req, res) => {
 
   // Cari nomor order yang sesuai
   const existingOrder = await Order.findOne({ where: { no_order } });
+  const outputPath = `uploads/inspeksi-${no_order}-${tahun}${bulan}.pdf`;
 
   if (!existingOrder) {
     return res.status(404).json({ message: 'Nomor order tidak ditemukan' });
@@ -54,65 +57,34 @@ exports.getDownloadByMonth = async (req, res) => {
     order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
   });
 
-  const doc = new PDFDocument({ margin: 30, size: 'A4' });
-  const outputPath = `uploads/inspeksi-${tahun}${bulan}.pdf`;
-  doc.pipe(fs.createWriteStream(outputPath));
 
 
-  // const tableHeaders = ['Name', 'Age', 'Other Info'];
-
-  // Tambahkan header ke PDF
-  doc
-  .text('INSPEKSI AKSES HAMA', { align: 'center' });
-  doc.moveDown();
-  doc
-  .text(`Tanggal : ${formattedDate}`, { align: 'left', margins:{left:20} });
-  // doc.moveDown();
-  doc
-  .text(`Periode : ${bulan} ${tahun}`, { align: 'left', margins:{left:20} });
-  doc
-  .text(`Berikut daftar peralatan di Project : ${no_order}`, { align: 'left', margins:{left:20} });
-  doc.moveDown();
-
-  // Tentukan opsi untuk tabel
-  const options = {
-    margins: { top: 50, left: 50, bottom: 30, right: 50 },
-    hideHeader :true,
-  };
+const templateContent = fs.readFileSync('inspeksitemplate.html', 'utf8');
+const compiledTemplate = handlebars.compile(templateContent);
+const htmlContent = compiledTemplate({
+  formattedDate,
+  bulan,
+  tahun,
+  inspeksiList: inspeksiList.map((inspeksi, index) => ({
+    no: index + 1,
+    lokasi: inspeksi.lokasi,
+    tanggal: inspeksi.tanggal,
+    gambar: inspeksi.bukti_foto,
+    keterangan: inspeksi.keterangan,
+    rekomendasi: inspeksi.rekomendasi,
+  })),
+});
 
 
+// Opsi konversi PDF
+const options = { format: 'A4', orientation: 'portrait' };
 
-    const inspeksiNumbered = inspeksiList.map((inspeksi, index) => ({
-      ...inspeksi.toJSON(),
-      no: index + 1,
-    }));
-
-    const table = {
-      headers: [
-        { label: "No", property: 'no', width: 30, renderer: null },
-        { label: "Lokasi", property: 'lokasi', width: 80, renderer: null },
-        { label: "Tanggal", property: 'tanggal', width: 80, renderer: null }, 
-        { label: "Gambar / Foto Dokumentasi", property: 'bukti_foto', width: 150, renderer: null }, 
-        { label: "Keterangan", property: 'keterangan', width: 100, renderer: null }, 
-        { label: "Rekomendasi", property: 'rekomendasi', width: 100, renderer: null },
-       
-       
-      ],    
-
-      datas: inspeksiNumbered
-     
-    };
-  
-    doc.table(table, {
-      prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
-        doc.font("Helvetica").fontSize(10);
-        indexColumn === 0 && doc.addBackground(rectRow, 'white', 0.15);
-      },
-    });
-
-    doc.end();
+// Konversi HTML ke PDF
+pdf.create(htmlContent, options).toFile(outputPath, (err, res) => {
+  if (err) return console.error(err);
+  console.log('PDF created successfully:', res.filename);
+});
     
- 
 res.status(201).json({ success: true, url: outputPath });
 
   } catch (error) {

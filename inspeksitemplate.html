@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INSPEKSI AKSES HAMA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      font-size: 12px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    p {
+        font-size: 12px;
+    }
+    h1 {
+        text-align: center;  
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .img-container {
+      max-width: 85px;
+      max-height: 85px;
+      text-align: center;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+    <h1>INSPEKSI AKSES HAMA</h1>
+    <p>Tanggal : {{formattedDate}}</p>
+    <p>Periode : {{bulan}}-{{tahun}}</p>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Lokasi</th>
+          <th>Tanggal</th>
+          <th>Gambar / Foto Dokumentasi</th>
+          <th>Keterangan</th>
+          <th>Rekomendasi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#inspeksiList}}
+        <tr>
+          <td>{{no}}</td>
+          <td>{{lokasi}}</td>
+          <td>{{tanggal}}</td>
+          <td><img src="http://localhost:3000/uploads/{{ gambar }}" alt="Gambar" class="img-container"></td>
+          <td>{{keterangan}}</td>
+          <td>{{rekomendasi}}</td>
+        </tr>
+        {{/inspeksiList}}
+      </tbody>
+    </table>
+  </body>
+</html>

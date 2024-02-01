@@ -43,7 +43,7 @@ router.post('/daily/add/:no_order',authenticateToken, dailyController.addDaily);
 router.get('/daily/getall/:no_order',authenticateToken, dailyController.getAllDaily);
 router.get('/daily/getall/:no_order/:tanggal',authenticateToken, dailyController.getAllDailyDate);
 router.get('/daily/getall/:no_order/:tahun/:bulan',authenticateToken, dailyController.getAllDailyByMonth);
-// router.get('/daily/download/:no_order/:tahun/:bulan',authenticateToken, dailyController.getDownloadByMonth);
+router.get('/daily/download/:no_order/:tahun/:bulan',authenticateToken, dailyController.getDownloadByMonth);
 
 
 // indeks

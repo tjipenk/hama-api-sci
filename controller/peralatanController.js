@@ -22,10 +22,6 @@ exports.getDownloadByMonth = async (req, res) => {
   const currentDate = new Date();
   const formattedDate = format(currentDate, 'dd-MM-yyyy');
 
-
- 
-
-
   // Cari nomor order yang sesuai
   const existingOrder = await Order.findOne({ where: { no_order } });
 
@@ -43,23 +39,9 @@ exports.getDownloadByMonth = async (req, res) => {
     order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
   });
 
-  // const peralatanNumbered = peralatanList.map((peralatan, index) => ({
-  //   ...peralatan.toJSON(),
-  //   no: index + 1,
-  // }));
-
-  // const doc = new PDFDocument();
-  // doc.pipe(fs.createWriteStream(`peralatan-${tahun}${bulan}.pdf`));
-  // const tableHeaders = [ 'Nama', 'Merk', 'Jumlah', 'Satuan', 'Kondisi'];
-  // tableHeaders.forEach(header => {
-  //   doc.text(200, 10, header, {underline: true});
-  // });
-  // doc.moveDown();
-
-  // peralatanList.forEach(item =>{
-  //  console.log(item);
+  
   const doc = new PDFDocument({ margin: 30, size: 'A4' });
-  const outputPath = `uploads/peralatan-${tahun}${bulan}.pdf`;
+  const outputPath = `uploads/peralatan-${no_order}-${tahun}${bulan}.pdf`;
   doc.pipe(fs.createWriteStream(outputPath));
 
 

@@ -37,32 +37,13 @@ exports.getDownloadByMonth = async (req, res) => {
         [Op.between]: [startDate, endDate],
       },
     },
-    order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
+    order: [['tanggal', 'ASC']], 
   });
 
-  // const peralatanNumbered = peralatanList.map((peralatan, index) => ({
-  //   ...peralatan.toJSON(),
-  //   no: index + 1,
-  // }));
-
-  // const doc = new PDFDocument();
-  // doc.pipe(fs.createWriteStream(`peralatan-${tahun}${bulan}.pdf`));
-  // const tableHeaders = [ 'Nama', 'Merk', 'Jumlah', 'Satuan', 'Kondisi'];
-  // tableHeaders.forEach(header => {
-  //   doc.text(200, 10, header, {underline: true});
-  // });
-  // doc.moveDown();
-
-  // peralatanList.forEach(item =>{
-  //  console.log(item);
   const doc = new PDFDocument({ margin: 30, size: 'A4', layout: 'landscape' });
-  const outputPath = `uploads/pemakaian-${tahun}${bulan}.pdf`;
+  const outputPath = `uploads/pemakaian-${no_order}-${tahun}${bulan}.pdf`;
   doc.pipe(fs.createWriteStream(outputPath));
 
-
-  // const tableHeaders = ['Name', 'Age', 'Other Info'];
-
-  // Tambahkan header ke PDF
   doc
   .text('Monitoring Pemakaian Bahan Chemical / Non-Chemical', { align: 'center' });
   doc.moveDown();

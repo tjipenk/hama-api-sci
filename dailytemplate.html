@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INSPEKSI AKSES HAMA</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      font-size: 12px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    p {
+        font-size: 12px;
+    }
+    h1 {
+        text-align: center;  
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .img-container {
+      max-width: 85px;
+      max-height: 85px;
+      text-align: center;
+      vertical-align: middle;
+      position: relative;
+      page-break-inside: avoid;
+    }
+    section {
+      display: flex;
+      flex-direction: row; 
+      flex-flow: row;/* Mengatur agar item dapat melingkar ke baris baru jika melewati lebar container */
+    }
+    #row {
+  flex-direction: row;
+}
+    .content {
+  width: 200px;
+  height: 200px;
+  display: flex;
+}
+    .column {
+      width: 25%; /* Sesuaikan lebar kolom sesuai kebutuhan Anda */
+    
+    }
+    p {
+      margin: 0; /* Menghapus margin bawaan pada paragraf */
+    }
+   
+   
+  </style>
+</head>
+<body>
+    <h1>DAILY ACTIVITY</h1>
+    <p>Nama Project : {{no_order}}</p>
+    <p>Tanggal : {{formattedDate}}</p>
+    <p>Periode : {{bulan}}-{{tahun}}</p>
+  
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Lokasi</th>
+          <th>Jenis Treatment</th>
+          <th>Jenis Hama yang Ditemukan</th>
+          <th>Jumlah</th>
+          <th>Bukti Foto</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#dailyList}}
+        <tr>
+          <td>{{no}}</td>
+          <td>{{lokasi}}</td>
+          <td>{{jenis_treatment}}</td>
+          <td>{{jenis_hama}}</td>
+          <td>{{jumlah}}</td>
+          <td><img src="http://localhost:3000/uploads/{{ gambar }}" alt="Gambar" class="img-container"></td>
+          <td>{{keterangan}}</td>
+      
+        </tr>
+        {{/dailyList}}
+      </tbody>
+    </table>
+        <!-- <section>
+            <div id="row" class="content">
+            <p>Keterangan : *</p>
+            <p>A : Monitoring & Spraying</p>
+            <p>B : Mekanik</p>
+            <p>C : Thermal fogging</p>
+            </div>
+            <div class="column">
+            <p>D : Baiting (Baiting Gel)</p>
+            <p>E : Rodent control (Umpan racun)</p>
+            <p>F : Larvaciding</p>
+            </div>
+            <div class="column">
+            <p>G : Monitoring Trapping (Rodent Bait Station / Glue Trap / Black Hole / Pohon Lalat / Cockroach Trap)</p>
+            <p>H : Cold fogging</p>
+            <p>I : Misting</p>
+            </div>
+            <div class="column">
+            <p>J : Lain-lain (Pengendalian Anjing / Kucing / Ular / Tawon / Lebah)</p>
+            </div>
+        </section> -->
+  </body>
+</html>

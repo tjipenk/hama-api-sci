@@ -3,6 +3,11 @@ const { Order, DailyActivity} = require('../models');
 const multer = require('multer');
 const path = require('path');
 const { Op } = require('sequelize');
+const fs = require('fs');
+const { format } = require('date-fns');
+const pdf = require('html-pdf');
+const handlebars = require('handlebars');
+
 
 
 
@@ -26,6 +31,90 @@ const upload = multer({ storage });
 
 
 uploadFile = upload.single('bukti_foto'); 
+
+
+
+exports.getDownloadByMonth = async (req, res) => {
+
+  try {
+    const {no_order, bulan, tahun} = req.params;
+
+  const startDate = new Date(`${tahun}-${bulan}-01`);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
+
+  const currentDate = new Date();
+  const formattedDate = format(currentDate, 'dd-MM-yyyy');
+
+  // Cari nomor order yang sesuai
+  const existingOrder = await Order.findOne({ where: { no_order } });
+  const outputPath = `uploads/daily-${no_order}-${tahun}${bulan}.pdf`;
+
+  if (!existingOrder) {
+    return res.status(404).json({ message: 'Nomor order tidak ditemukan' });
+  }
+
+  const dailyList = await DailyActivity.findAll({
+    where: {
+      no_order,
+      tanggal: {
+        [Op.between]: [startDate, endDate],
+      },
+    },
+    order: [['tanggal', 'ASC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
+  });
+
+
+
+const templateContent = fs.readFileSync('dailytemplate.html', 'utf8');
+const compiledTemplate = handlebars.compile(templateContent);
+const htmlContent = compiledTemplate({
+  no_order,
+  formattedDate,
+  bulan,
+  tahun,
+  dailyList: dailyList.map((daily, index) => ({
+    no: index + 1,
+    lokasi: daily.lokasi,
+    jenis_treatment: daily.jenis_treatment,
+    jenis_hama: daily.hama_ditemukan,
+    jumlah: daily.jumlah,
+    gambar: daily.bukti_foto,
+    keterangan: daily.keterangan,
+  })),
+});
+
+
+// Opsi konversi PDF
+const options = {
+  format: 'A4',
+  orientation: 'landscape',
+  border: {
+    top: '1cm',
+    right: '1cm',
+    bottom: '1cm',
+    left: '1cm',
+  },
+  
+};
+
+// Konversi HTML ke PDF
+pdf.create(htmlContent, options).toFile(outputPath, (err, res) => {
+  if (err) return console.error(err);
+  console.log('PDF created successfully:', res.filename);
+});
+    
+res.status(201).json({ success: true, url: outputPath });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Gagal mendapatkan data pdf peralatan' });
+    console.log(error);
+
+  }
+  
+
+}
 
 exports.getAllDailyByMonth = async (req, res) => {
   try {
