@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table Absen</title>
+<style>
+     body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 2px;
+      text-align: center;
+      font-size: 6px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    p {
+        font-size: 8px;
+    }
+    h1 {
+        text-align: center;  
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .img-header {
+      max-width: 50px;
+      max-height: 50px;
+      text-align: center;
+      vertical-align: middle;
+    }
+</style>
+</head>
+<body>
+    <img src="http://localhost:3000/uploads/assets/logos.png" alt="logo-sucofindo"  class="img-header">
+    <br>
+    <hr>
+   
+   <h1>TIME SHEET TIM PEST CONTROL</h1>
+<p>Tanggal : {{formattedDate}}</p>
+<p>Periode : {{bulan}}-{{tahun}}</p>
+<p>Project : {{no_order}}</p>
+
+
+<table>
+
+    <thead>
+        <tr>
+            <th rowspan="2">No</th>
+            <th rowspan="2">Nama Personel</th>
+            <th colspan="{{jumlahTanggal}}">Tanggal</th>
+        </tr>
+        <tr>
+            <!-- Ganti "29" menjadi jumlah hari dalam bulan tersebut -->
+            <!-- Di sini, kita menggunakan bulan Februari 2024 sebagai contoh -->
+            <!-- Anda perlu mengganti jumlah kolom sesuai dengan bulan yang Anda butuhkan -->
+            <!-- Anda juga bisa menambahkan tahun jika perlu -->
+            <!-- Misalnya, "Tanggal (Februari 2024)" -->
+            <!-- Dan pastikan menyesuaikan jumlah hari dengan jumlah hari dalam bulan tersebut -->
+            {{#tglList}}
+            <th>{{tgl}}</th>
+            {{/tglList}}
+            
+            <!-- <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>13</th>
+            <th>14</th>
+            <th>15</th>
+            <th>16</th>
+            <th>17</th>
+            <th>18</th>
+            <th>19</th>
+            <th>20</th>
+            <th>21</th>
+            <th>22</th>
+            <th>23</th>
+            <th>24</th>
+            <th>25</th>
+            <th>26</th>
+            <th>27</th>
+            <th>28</th>
+            <th>29</th> 
+            <th>30</th> 
+            <th>31</th>  -->
+        </tr>
+    </thead>
+    <tbody>
+      {{#personList}}
+      <tr>
+          <td>{{no}}</td>
+          <td>{{nama}}</td>
+          {{#each presence}}
+              <td>{{this}}</td>
+          {{/each}}
+      </tr>
+  {{/personList}}
+  </tbody>
+  
+  
+ 
+</table>
+
+</body>
+</html>

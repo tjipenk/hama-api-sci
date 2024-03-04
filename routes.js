@@ -30,6 +30,7 @@ router.get('/personel/absen/getall/:no_order/:tahun/:bulan',authenticateToken, p
 router.get('/personel/absen/name/:no_order/:id',authenticateToken, personelController.getAbsenByIdPerson);
 router.get('/personel/absen/name/:no_order/:id/:tanggal',authenticateToken, personelController.getAbsenPersonByDate);
 router.get('/personel/absen/name/:no_order/:id/:tahun/:bulan',authenticateToken, personelController.getAbsenPersonByMonth);
+router.get('/personel/absen/download/:no_order/:tahun/:bulan',authenticateToken, personelController.getDownloadByMonth);
 
 // peralatan
 router.post('/peralatan/add/:no_order',authenticateToken, peralatanController.addPeralatan);

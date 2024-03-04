@@ -44,7 +44,16 @@ exports.getDownloadByMonth = async (req, res) => {
   const outputPath = `uploads/perhitungan-index-${no_order}-${tahun}${bulan}.pdf`;
   doc.pipe(fs.createWriteStream(outputPath));
 
-  // Tambahkan header ke PDF
+  doc.image('uploads/assets/logos.png', { width: 50 });
+  doc.moveDown();
+
+// Tambahkan divider
+doc.moveTo(10, 75)
+   .lineTo(580, 75)
+   .stroke();
+
+   // Tambahkan header ke PDF
+   doc.moveDown();
   doc
   .text('PERHITUNGAN INDEKS POPULASI HAMA', { align: 'center' });
   doc.moveDown();

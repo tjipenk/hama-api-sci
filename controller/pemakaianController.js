@@ -44,6 +44,18 @@ exports.getDownloadByMonth = async (req, res) => {
   const outputPath = `uploads/pemakaian-${no_order}-${tahun}${bulan}.pdf`;
   doc.pipe(fs.createWriteStream(outputPath));
 
+
+  doc.image('assets/logos.png', { width: 50 });
+  doc.moveDown();
+
+// Tambahkan divider
+doc.moveTo(10, 75)
+   .lineTo(980, 75)
+   .stroke();
+
+   // Tambahkan header ke PDF
+   doc.moveDown();
+
   doc
   .text('Monitoring Pemakaian Bahan Chemical / Non-Chemical', { align: 'center' });
   doc.moveDown();

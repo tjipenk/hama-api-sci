@@ -61,10 +61,17 @@
       margin: 0; /* Menghapus margin bawaan pada paragraf */
     }
    
-   
+    .img-header {
+      max-width: 50px;
+      max-height: 50px;
+      text-align: center;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
+  <img src="http://localhost:3000/uploads/assets/logos.png" alt="logo-sucofindo"  class="img-header">
+<hr>
     <h1>DAILY ACTIVITY</h1>
     <p>Nama Project : {{no_order}}</p>
     <p>Tanggal : {{formattedDate}}</p>

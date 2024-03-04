@@ -1,5 +1,145 @@
 const { Personel, Order,Absensi } = require('../models');
 const { Op } = require('sequelize');
+const fs = require('fs');
+const { format } = require('date-fns');
+const pdf = require('html-pdf');
+const handlebars = require('handlebars');
+
+
+
+
+exports.getDownloadByMonth = async (req, res) => {
+
+  try {
+    const {no_order, bulan, tahun} = req.params;
+
+  const startDate = new Date(`${tahun}-${bulan}-01`);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(new Date(startDate).setMonth(startDate.getMonth() + 1) - 1);
+
+  const currentDate = new Date();
+  const formattedDate = format(currentDate, 'dd-MM-yyyy');
+  const daysInMonth = new Date(tahun, bulan, 0).getDate();
+
+  // Cari nomor order yang sesuai
+  const existingOrder = await Order.findOne({ where: { no_order } });
+  const outputPath = `uploads/personel-${no_order}-${tahun}${bulan}.pdf`;
+const filteredAbsen = [];
+  if (!existingOrder) {
+    return res.status(404).json({ message: 'Nomor order tidak ditemukan' });
+  }
+
+  const personelList = await Personel.findAll({ where: { no_order: no_order } });
+ 
+  const absenList = await Absensi.findAll({
+    where: {
+      no_order,
+      tanggal: {
+        [Op.between]: [startDate, endDate],
+      },
+    },
+    order: [['tanggal', 'DESC']], // Opsional: Mengurutkan berdasarkan tanggal terbaru
+  });
+
+  const person = await Personel.findAll({ where: { no_order: no_order }, include:  {
+    model: Absensi,
+    where: {
+        tanggal: {
+            [Op.between]: [startDate, endDate]
+        }
+    },
+    required: false, 
+    order: ['tanggal', 'ASC']// Opsional: Mengurutkan berdasarkan tanggal terbaru
+} });
+
+ person.forEach(personel => {
+  const filteredData = personel.Absensis.filter(absen=>{
+    const absenDate = new Date(absen.tanggal);
+   
+    const filtering = (absenDate.getMonth()+1) == bulan && (absenDate.getFullYear()) == tahun;
+    return filtering;
+  }).map(absen=>absen.tanggal).sort((a,b)=>new Date(a) - new Date(b));
+filteredAbsen.push(filteredData);
+
+});
+
+  const jumlahTanggal = daysInMonth;
+  const jlh = daysInMonth;
+  const tanggalan = Array.from({length: jumlahTanggal}, (_, i) => i + 1);
+
+// const dataAbsen = person.Absensis;
+// console.log(`data Absen ${filteredAbsen}`);
+
+const templateContent = fs.readFileSync('personeltemplate.html', 'utf8');
+const compiledTemplate = handlebars.compile(templateContent)
+handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+  return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+});
+
+
+const htmlContent = compiledTemplate({
+  no_order,
+  formattedDate,
+  bulan,
+  tahun,
+  jumlahTanggal,
+ 
+  tglList: tanggalan.map((tanggal, index)=>({
+    tgl:index+1
+  })),
+
+  personList: person.map((personel, index) => {
+    const absen = personel.Absensis.map(absensi => ({
+        tanggal: parseInt(absensi.tanggal.split('-')[2]), 
+        keterangan: absensi.keterangan
+    }));
+    const tanggalList = Array.from({ length: jumlahTanggal }, (_, index) => index + 1);
+    const presence = tanggalList.map(date => {
+        const absensi = absen.find(item => item.tanggal === date); // Cari input absen untuk tanggal tertentu
+        return absensi ? absensi.keterangan === 'Tidak Hadir' ? '' : absensi.keterangan : ''; // Jika ada input absen, gunakan keterangannya. Jika tidak, kosongkan.
+    });
+    return {
+        no: index + 1,
+        nama: personel.name,
+        absen: absen,
+        tanggalList: tanggalList,
+        presence: presence // Menambahkan informasi kehadiran ke dalam objek personel
+    };
+})
+ 
+});
+
+
+// Opsi konversi PDF
+const options = {
+  format: 'A4',
+  orientation: 'landscape',
+  border: {
+    top: '1cm',
+    right: '1cm',
+    bottom: '1cm',
+    left: '1cm',
+  },
+  
+};
+
+// Konversi HTML ke PDF
+pdf.create(htmlContent, options).toFile(outputPath, (err, res) => {
+  if (err) return console.error(err);
+  console.log('PDF created successfully:', res.filename);
+});
+    
+res.status(201).json({ success: true, url: outputPath });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Gagal mendapatkan data pdf peralatan' });
+    console.log(error);
+
+  }
+  
+
+}
 
 
 exports.addPersonelByNoOrder = async (req, res) => {

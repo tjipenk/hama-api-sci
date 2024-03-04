@@ -45,7 +45,16 @@ exports.getDownloadByMonth = async (req, res) => {
   doc.pipe(fs.createWriteStream(outputPath));
 
 
-  // const tableHeaders = ['Name', 'Age', 'Other Info'];
+  doc.image('assets/logos.png', { width: 50 });
+  doc.moveDown();
+
+// Tambahkan divider
+doc.moveTo(10, 75)
+   .lineTo(580, 75)
+   .stroke();
+
+   // Tambahkan header ke PDF
+   doc.moveDown();
 
   // Tambahkan header ke PDF
   doc
