@@ -1,12 +1,12 @@
 version: "3"
-  service:
-    api:
-      build: 
-        context: .
-        dockerfile: Dockerfile-api
-      platform: linux/amd64
-      container_name: api
-      volumes:
-      - ./:/app
-      ports:
-      - "3000:3000"
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile-api
+    platform: linux/amd64
+    container_name: api
+    volumes:
+    - ./:/app
+    ports:
+    - "3000:3000"
